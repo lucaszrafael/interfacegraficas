@@ -1,0 +1,90 @@
+<%-include('base_header') -%>
+<script>
+    window.onload = function(){
+        let search = document.getElementById('search').value
+
+        $.ajax({
+            url: 'http://localhost:5002/api_gateway/persistence/search_books?search=' + search,
+            dataType: 'json',
+            crossOrigin: true,
+            success: function(data){
+                for (let i=0; i<data.length; i++) {
+                    document.getElementById("results").innerHTML += `
+                        <tr>
+                            <th scope="row">${data[i].id}</th>
+                            <td>${data[i].title}</td>
+                            <td>${data[i].subject.name}</td>
+                            <td>${data[i].author}</td>
+                            <td>${formatDate(data[i].publication_date)}</td>
+                            <td>
+                                <a href="/update-book/${data[i].id}" class="btn btn-primary btn-sm">Editar</a>
+                                <button class="btn btn-danger btn-sm" onclick="deleteBook(${data[i].id})">Excluir</button>
+                            </td>
+                        </tr>
+                    `
+                }
+            }
+        });
+    }
+    
+    function searchBooks(){
+        let search = document.getElementById('search').value;
+        if (search) {
+            window.location.href="/search-books/" + search ; 
+        }
+    }
+
+    function deleteBook(id){
+        if (confirm("Você deseja realmente excluir este livro?")) {
+            $.ajax({
+                url: 'http://localhost:5002/api_gateway/persistence/delete_book?id=' + id,
+                dataType: 'json',
+                crossOrigin: true,
+                success: function(data){
+                    window.location.reload()
+                }
+            });
+        }
+    }
+
+    function formatDate(inputDate){
+        const date = new Date(inputDate)
+        const day  = date.getDate().toString()
+        const dayF = (day.length == 1) ? '0' + day : day
+        const month  = (date.getMonth() + 1).toString()
+        const monthF = (month.length == 1) ? '0' + month : month
+        const yearF = date.getFullYear()
+        return dayF + "/" + monthF + "/" + yearF
+    }
+</script>
+
+    <div class="container">
+        <h1 class="text-center fs-1 mt-4">Pesquisar Livro</h1>
+
+        <div class="input-group mb-3 mt-4">
+            <input value="<%= search %>" type="search" class="form-control" placeholder="Pesquise o título do livro" id="search">
+            <div class="input-group-append">
+                <button onclick="searchBooks()" class="btn btn-dark" type="button">Pesquisar</button>
+            </div>
+        </div>
+
+        <h2 class="text-center mt-5 mb-3 fs-3">Resultados:</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Título</th>
+                    <th scope="col">Assunto</th>
+                    <th scope="col">Autor</th>
+                    <th scope="col">Data de Publicação</th>
+                    <th scope="col">Ações</th>
+                </tr>
+            </thead>
+            <tbody id="results">
+            </tbody>
+        </table>
+        <div class="center mt-4">
+            <a class="btn btn-dark" href="/recovery-search-books">Gerar código de recuperação</a>
+        </div>
+    </div>
+<%- include('base_footer') -%>

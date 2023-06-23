@@ -1,0 +1,34 @@
+<%-include('base_header') -%>
+    <div class="container">
+        <h1 class="text-center m-4 fs-1">Código: 12345</h1>
+
+        <p class="info text-center fs-3">Pesquisa: "titulo"</p>
+
+        <h2 class="text-center mt-5 mb-3 fs-3">Resultados:</h2>
+
+        <div class="container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Título</th>
+                    <th scope="col">Assunto</th>
+                    <th scope="col">Autor</th>
+                    <th scope="col">Data de Publicação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for(var i=0; i< list_books.length; ++i) { %>   
+                    <tr>
+                        <th scope="row"><%=list_books[i].id %></th>
+                        <td><%=list_books[i].title %></td>
+                        <td><%=list_books[i].subject %></td>
+                        <td><%=list_books[i].author %></td>
+                        <td><%=list_books[i].publication_date %></td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table> 
+        </div>
+
+<%- include('base_footer') -%>

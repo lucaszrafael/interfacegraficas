@@ -1,0 +1,21 @@
+{
+  "name": "interfaces_graficas",
+  "version": "1.0.0",
+  "description": "Interfaces gráficas do projeto da disciplina de Laboratório de Engenharia de Software",
+  "main": "src/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon ./src/app.js",
+    "start": "node ./src/app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "request": "^2.88.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.21"
+  }
+}

@@ -1,0 +1,88 @@
+<%-include('base_header') -%>
+<script>
+    window.onload = function(){
+        $.ajax({
+            url: 'http://localhost:5002/api_gateway/persistence/list_subjects',
+            dataType: 'json',
+            crossOrigin: true,
+            success: function(data){
+                for (let i=0; i<data.length; i++) {
+                    document.getElementById("subject").innerHTML += `
+                        <option value="${data[i].id}">
+                            ${data[i].name}
+                        </option>
+                    `
+                }
+                let id = document.getElementById("id").value
+                $.ajax({
+                    url: 'http://localhost:5002/api_gateway/persistence/get_book?id=' + id,
+                    dataType: 'json',
+                    crossOrigin: true,
+                    success: function(data){
+                        document.getElementById("title").value = data.title
+                        document.getElementById("subject").value = data.subject.id
+                        document.getElementById("author").value = data.author
+                        document.getElementById("publicationDate").value = formatDateInput(data.publication_date)
+                    }
+                });
+            }
+            
+        });
+    }
+
+    function updateBook() {
+        let id = document.getElementById("id").value
+        let title = document.getElementById('title').value;
+        let subject = document.getElementById('subject').value;
+        let author = document.getElementById('author').value;
+        let publicationDate = document.getElementById('publicationDate').value;
+
+        if (title && subject && author && publicationDate) {
+            $.ajax({
+                url: 'http://localhost:5002/api_gateway/persistence/update_book?id=' + id + '&title='+title + '&subject=' + subject + '&author=' + author + '&publication_date=' + publicationDate,
+                dataType: 'json',
+                crossOrigin: true,
+                success: function(data){
+                    alert(`Livro editado com sucesso! \n\n Título: ${data.title} \n Autor: ${data.author} \n Assunto: ${data.subject} \n Data de Publicação: ${data.publication_date}`)
+                    window.location.href = "/search-books/" + data.title
+                }
+            });
+        }else {
+            alert("Preencha todos os campos!")
+        }
+    }
+
+    function formatDateInput(data) {
+        return data.split("T")[0]
+    }
+</script>
+<div class="container">
+    <div class="center">
+        <div class="form">
+            <h1 class="text-center fs-1">Editar Livro</h1>
+            <input id="id" type="hidden" value="<%= id %>" />
+            <div class="mb-3">
+                <label class="form-label">Título</label>
+                <input type="text" class="form-control" id="title">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Assunto</label>
+                <select id="subject" class="form-control">
+                    <option selected disabled>Selecione um assunto...</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Autor</label>
+                <input type="text" class="form-control" id="author">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Data de Publicação</label>
+                <input type="date" class="form-control" id="publicationDate">
+            </div>
+            <div class="center">
+                <button type="submit" class="btn btn-dark" onclick="updateBook()">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<%-include('base_footer') -%>

@@ -1,0 +1,38 @@
+<%-include('base_header') -%>
+<script src='js/jquery.min.js'></script>
+<script>
+    function registerSubject() {
+        const name = document.getElementById('name').value;
+
+        if (name){
+            $.ajax({
+                url: 'http://localhost:5002/api_gateway/persistence/add_subject?name=' + name,
+                dataType: 'json',
+                crossOrigin: true,
+                success: function(data){
+                    alert(`Assunto cadastrado com sucesso! \n\n Nome: ${data.name}`)
+                    window.location.href = "/register-book"
+                }
+            });
+        }else {
+            alert("Preencha o campo nome!")
+        }
+    } //persistence ajax
+</script>
+
+<div class="container">
+    <div class="center">
+        <div class="form">
+            <h1 class="text-center fs-1">Cadastrar Assunto</h1>
+                <div class="mb-3">
+                    <label class="form-label">Nome</label>
+                    <input type="name" class="form-control" id="name">
+                </div>
+            <div class="center">
+                <button type="submit" class="btn btn-dark" onclick="registerSubject()">Cadastrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%-include('base_footer') -%>

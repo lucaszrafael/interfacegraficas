@@ -1,0 +1,21 @@
+<%-include('base_header') -%>
+<script>
+    function searchBooks(){
+        const search = document.getElementById('search').value;
+        if (search) {
+            window.location.href="/search-books/" + search ; 
+        }
+    }
+</script>
+
+    <div class="container">
+        <h1 class="text-center fs-1 mt-5">Pesquisar Livro</h1>
+
+        <div class="input-group mt-4">
+            <input type="search" class="form-control" id="search" placeholder="Pesquise o título do livro">
+            <div class="input-group-append">
+                <button onclick="searchBooks()" class="btn btn-dark" type="button">Pesquisar</button>
+            </div>
+        </div>
+    </div>
+<%- include('base_footer') -%>
